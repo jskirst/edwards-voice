@@ -5,7 +5,7 @@
 </template>
 
 <script type = "text/javascript" >
-
+var axios = require('axios');
 import Step from './Step';
 
 export default {
@@ -14,32 +14,39 @@ export default {
   },
   data() {
     return {
-      steps: [
-        {
-          text: "starting text"
-        }
-      ]
+      steps: [],
+      facts: {}
     }
   },
   methods: {
-    stepBack(step) {
-      const stepsIndex = this.steps.indexOf(step);
+    stepBack() {
+      const stepsIndex = this.steps.length - 1;
       this.steps.splice(stepsIndex, 1);
     },
-    stepForward(step) {
-      axios.post('http://', {
-          firstName: 'Fred',
-          lastName: 'Flintstone'
-        })
-        .then(function (response) {
-          console.log(response);
-        })
-        .catch(function (error) {
-          console.log(error);
-        });
-      this.steps.push({ text: 'text' });
+    stepForward() {
+      if(this.steps.length > 0){
+        var lastStep = this.steps[this.steps.length -1].step
+        console.log(lastStep);
+        var answers = lastStep.answers;
+        for (var fact_name in answers) {
+          this.facts[fact_name] = answers[fact_name].input;
+        }
+      }
+      var _this = this
+      axios.post('http://edward-api.herokuapp.com/api/steps', {
+        facts: this.facts,
+      })
+      .then(function (response) {
+        _this.steps.push({ step: response.data });
+      })
+      .catch(function (error) {
+        console.log(error);
+      });
     }
   },
+  created() {
+    this.stepForward();
+  }
 };
 </script>
 
