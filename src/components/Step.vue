@@ -3,19 +3,15 @@
     <div class='ui centered card'>
       <div class='content'>
         <div class='ui form'>
-          <div class='field'>
-            <input v-model="text" type='text'>
-          </div>
-          <div v-for="(answer, name) in answers">
-            <div class='select' v-if="answer.input_type == 'select'">
-              <select v-model="answer.input">
-                <option v-bind:name="name" v-for="(value, key) in answer.options" v-bind:value="key">{{value}}</option>
+          <span v-for="part in parts">
+            <span v-if="part.type == 'text'">{{ part.content }}</span>
+            <span v-if="part.type == 'answer'">
+              <select v-model="part.answer.input" v-if="part.answer.input_type == 'select'">
+                <option v-for="(value, key) in part.answer.options" v-bind:value="key">{{value}}</option>
               </select>
-            </div>
-            <div class='short-text' v-if="answer.input_type == 'short_text'">
-              <input type='text' v-bind:placeholder="name" v-model="answer.input">
-            </div>
-          </div>
+              <input type='text' v-model="part.answer.input" v-if="part.answer.input_type == 'short_text'">
+            </span>
+          </span>
           <div class='ui two button attached buttons'>
             <button class='ui basic blue button' v-on:click="stepForward()">
               Next
@@ -35,8 +31,7 @@ export default {
   props: ['step'],
   data() {
     return {
-      text: this.step.step.text,
-      answers: this.step.step.answers
+      parts: this.step.step.parts
     };
   },
   methods: {

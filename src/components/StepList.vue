@@ -26,10 +26,12 @@ export default {
     stepForward() {
       if(this.steps.length > 0){
         var lastStep = this.steps[this.steps.length -1].step
-        console.log(lastStep);
-        var answers = lastStep.answers;
-        for (var fact_name in answers) {
-          this.facts[fact_name] = answers[fact_name].input;
+        var parts = lastStep.parts;
+        for (var i = 0; i < parts.length; i++) {
+          var part = parts[i];
+          if(part.type == 'answer'){
+            this.facts[part.answer.name] = part.answer.input;
+          }
         }
       }
       var _this = this
