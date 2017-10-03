@@ -1,6 +1,14 @@
 <template>
-  <div>
-    <step v-on:step-back="stepBack" v-on:step-forward="stepForward" v-for="step in steps" :step.sync="step"></step>
+  <div class='step-list col s12'>
+    <step v-for="step in steps" :step.sync="step"></step>
+    <div class='ui two button attached buttons'>
+      <button class='ui basic blue button' v-on:click="stepForward()">
+        Next
+      </button>
+      <button class='ui basic red button' v-on:click="stepBack()">
+        Back
+      </button>
+    </div>
   </div>
 </template>
 
@@ -53,8 +61,5 @@ export default {
 </script>
 
 <style scoped>
-p.steps {
-  text-align: center;
-}
 </style>
 
