@@ -35,7 +35,7 @@ export default {
         }
       }
       var _this = this
-      axios.post('http://edward-api.herokuapp.com/api/steps', {
+      axios.post('https://edward-api.herokuapp.com/api/steps', {
         facts: this.facts,
       })
       .then(function (response) {
