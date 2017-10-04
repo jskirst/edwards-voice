@@ -2,12 +2,8 @@
   <div class='step-list col s12'>
     <step v-for="step in steps" :step.sync="step"></step>
     <div class='ui two button attached buttons'>
-      <button class='ui basic blue button' v-on:click="stepForward()">
-        Next
-      </button>
-      <button class='ui basic red button' v-on:click="stepBack()">
-        Back
-      </button>
+      <v-btn v-on:click="stepForward()">Next</v-btn>
+      <v-btn v-on:click="stepBack()">Back</v-btn>
     </div>
   </div>
 </template>

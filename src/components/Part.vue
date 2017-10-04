@@ -1,10 +1,9 @@
 <template>
   <div class="part">
-    <span v-if="part.type == 'text'" class="part-text">{{ part.content }}</span>
-    <div v-if="part.type == 'answer'" class="input-field inline">
-      <v-select v-model="part.answer.input" v-if="part.answer.input_type == 'select'" :items="part.answer.options">
-      </v-select>
-      <v-text-field type='text' v-model="part.answer.input" v-if="part.answer.input_type == 'short_text'"></v-text-field>
+    <div v-if="part.type == 'text'" class="part-text">{{ part.content }}</div>
+    <div v-if="part.type == 'answer'">
+      <v-select v-model="part.answer.input" v-if="part.answer.input_type == 'select'" :items="part.answer.options"></v-select>
+      <v-text-field v-model="part.answer.input" v-if="part.answer.input_type == 'short_text'" dark single-line></v-text-field>
     </div>
   </div>
 </template>
@@ -20,7 +19,23 @@ export default {
 };
 </script>
 
-<style scoped>
-  .part { display: inline-block; }
+<style>
+ .part {
+    display: inline-block;
+    font-size: 20px;
+  }
+  
+  .part-text {
+    padding: 10px 0 0 0;
+  }
+
+ .input-group--text-field {
+    padding: 13px 0 0 10px;
+  }
+
+  .input-group--text-field input {
+    font-size: 20px;
+    width: 6em;
+  }
 </style>
 
