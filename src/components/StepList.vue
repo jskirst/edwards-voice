@@ -2,8 +2,13 @@
   <div class='step-list col s12'>
     <step v-for="step in steps" :step.sync="step"></step>
     <div class='ui two button attached buttons'>
-      <v-btn v-on:click="stepForward()">Next</v-btn>
-      <v-btn v-on:click="stepBack()">Back</v-btn>
+      <v-btn fab dark class="indigo" v-on:click="stepBack()">
+        <v-icon dark>remove</v-icon>
+      </v-btn>
+
+      <v-btn fab dark class="indigo" v-on:click="stepForward()">
+        <v-icon dark>add</v-icon>
+      </v-btn>
     </div>
   </div>
 </template>
@@ -33,8 +38,8 @@ export default {
         var parts = lastStep.parts;
         for (var i = 0; i < parts.length; i++) {
           var part = parts[i];
-          if(part.type == 'answer'){
-            this.facts[part.answer.name] = part.answer.input;
+          if(part.type != 'text'){
+            this.facts[part.name] = part.input;
           }
         }
       }
