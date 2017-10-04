@@ -22,9 +22,13 @@ export default {
     Step,
   },
   data() {
+    var url = new URL(window.location);
+    var api_url = url.searchParams.get("api_url");
+
     return {
       steps: [],
-      facts: {}
+      facts: {},
+      api_url: api_url
     }
   },
   methods: {
@@ -44,7 +48,7 @@ export default {
         }
       }
       var _this = this
-      axios.post('https://edward-api.herokuapp.com/api/steps', {
+      axios.post(this.api_url, {
         facts: this.facts,
       })
       .then(function (response) {
