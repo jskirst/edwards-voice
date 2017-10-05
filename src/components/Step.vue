@@ -8,6 +8,7 @@
 import Part from './Part';
 
 export default {
+  name: 'Step',
   props: ['step'],
   components: {
     Part

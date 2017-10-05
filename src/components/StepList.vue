@@ -15,9 +15,11 @@
 
 <script type = "text/javascript" >
 var axios = require('axios');
+
 import Step from './Step';
 
 export default {
+  name: 'StepList',
   components: {
     Step,
   },
