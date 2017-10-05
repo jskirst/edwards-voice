@@ -9,12 +9,7 @@
 </template>
 
 <script>
-import StepList from './components/StepList';
-
 export default {
-  components: [
-    StepList
-  ],
   name: 'app'
 }
 </script>

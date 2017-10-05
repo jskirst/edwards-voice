@@ -5,6 +5,8 @@ import App from './App'
 import router from './router'
 import Vuetify from 'vuetify'
 Vue.use(Vuetify)
+import EdwardsVoice from '../src/index.js';
+Vue.use(EdwardsVoice);
 
 Vue.config.productionTip = false
 
