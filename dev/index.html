@@ -20,5 +20,10 @@
       <div id="app">
       </div>
     </div>
+    <script>
+      var url = new URL(window.location);
+      var api_url = url.searchParams.get("api_url");
+      window.edward_api_url = api_url;
+    </script>
   </body>
 </html>

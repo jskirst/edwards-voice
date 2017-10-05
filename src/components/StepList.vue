@@ -24,13 +24,10 @@ export default {
     Step,
   },
   data() {
-    var url = new URL(window.location);
-    var api_url = url.searchParams.get("api_url");
-
     return {
       steps: [],
       facts: {},
-      api_url: api_url
+      api_url: window.edward_api_url
     }
   },
   methods: {
