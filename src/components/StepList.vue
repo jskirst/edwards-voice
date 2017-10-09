@@ -1,15 +1,6 @@
 <template>
   <div class='step-list col s12'>
     <step v-for="step in steps" :step.sync="step"></step>
-    <div class='ui two button attached buttons'>
-      <v-btn fab dark class="indigo" v-on:click="stepBack()">
-        <v-icon dark>remove</v-icon>
-      </v-btn>
-
-      <v-btn fab dark class="indigo" v-on:click="stepForward()">
-        <v-icon dark>add</v-icon>
-      </v-btn>
-    </div>
   </div>
 </template>
 
