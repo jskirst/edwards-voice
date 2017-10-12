@@ -14,3 +14,8 @@ const EdwardsVoice = {
 };
 
 export default EdwardsVoice;
+
+if (typeof window !== 'undefined' && window.Vue) {
+  console.log('Registring EdwardsVoice globally');
+  window.Vue.use(EdwardsVoice);
+}
