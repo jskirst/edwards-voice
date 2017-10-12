@@ -9,6 +9,9 @@ var ExtractTextPlugin = require('extract-text-webpack-plugin')
 var env = config.build.env
 
 var webpackConfig = merge(baseWebpackConfig, {
+  entry: {
+    app: './src/index.js'
+  },
   output: {
     filename: 'edwards-voice.js',
     libraryTarget: 'window',

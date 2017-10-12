@@ -8,7 +8,7 @@
 
 <script>
 export default {
-  name: 'Part',
+  name: 'part',
   props: ['part'],
   data() {
     return {

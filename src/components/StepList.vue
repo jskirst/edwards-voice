@@ -10,7 +10,7 @@ var axios = require('axios');
 import Step from './Step';
 
 export default {
-  name: 'StepList',
+  name: 'step-list',
   components: {
     Step,
   },
@@ -54,7 +54,4 @@ export default {
   }
 };
 </script>
-
-<style scoped>
-</style>
 
