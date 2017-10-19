@@ -1,5 +1,6 @@
 <template>
-  <div class="part">
+  <div class="part part--newline" v-if="part.type == 'newline'"></div>
+  <div class="part" v-else>
     <div v-if="part.type == 'text'" class="part-text">{{ part.content }}</div>
     <v-select v-model="part.input" v-if="part.type == 'select'" :items="part.options" placeholder="...."></v-select>
     <v-text-field v-model="part.input" v-if="part.type == 'short_text'" placeholder="......" :type="part.text_field_type" :style="{ width: part.characters + 'ch'}" :mask="part.mask" dark required></v-text-field>
@@ -19,9 +20,14 @@ export default {
 </script>
 
 <style>
- .part {
+  .part {
     display: inline-block;
     font-size: 20px;
+  }
+
+  .part.part--newline {
+    display: block;
+    height: 0;
   }
 
   .part-text {
@@ -29,7 +35,7 @@ export default {
     white-space: pre-wrap;
   }
 
- .input-group--text-field {
+  .input-group--text-field {
     padding: 13px 0 0 0;
   }
 
