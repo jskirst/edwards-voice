@@ -1,6 +1,7 @@
 <template>
   <div class='step'>
     <part v-for="part in parts" :part="part"></part>
+    <div v-if="step.cta" v-bind:click="emitCtaClicked" class="cta">{{ step.cta }}</div>
   </div>
 </template>
 
@@ -12,6 +13,11 @@ export default {
   props: ['step'],
   components: {
     Part
+  },
+  methods: {
+    emitCtaClicked() {
+      this.$emit('cta_clicked');
+    }
   },
   data() {
     return {

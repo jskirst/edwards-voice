@@ -1,6 +1,6 @@
 <template>
   <div class='step-list col s12'>
-    <step v-for="step in steps" :step.sync="step"></step>
+    <step v-for="step in steps" :step.sync="step" v-bind:cta_clicked="emitCtaClicked"></step>
   </div>
 </template>
 
@@ -22,6 +22,9 @@ export default {
     }
   },
   methods: {
+    emitCtaClicked() {
+      this.$emit('cta_clicked');
+    },
     stepBack() {
       const stepsIndex = this.steps.length - 1;
       this.steps.splice(stepsIndex, 1);
