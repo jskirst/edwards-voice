@@ -1,7 +1,7 @@
 <template>
   <div class='step'>
     <part v-for="part in parts" :part="part"></part>
-    <div v-if="step.cta !== undefined" v-bind:click="emitCtaClicked" class="cta">{{ step.cta }}</div>
+    <div v-if="cta"  v-on:click="emitCtaClicked()" class="cta">{{ cta }}</div>
   </div>
 </template>
 

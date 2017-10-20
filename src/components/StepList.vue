@@ -1,6 +1,6 @@
 <template>
   <div class='step-list col s12'>
-    <step v-for="step in steps" :step.sync="step" v-bind:cta_clicked="emitCtaClicked"></step>
+    <step v-for="step in steps" :step.sync="step" v-on:cta_clicked="emitCtaClicked"></step>
   </div>
 </template>
 
@@ -45,6 +45,11 @@ export default {
         facts: this.facts,
       })
       .then(function (response) {
+        if (response.data.token) {
+          if (_this.steps[_this.steps.length-1].token == response.data.token) {
+            _this.steps.pop()
+          }
+        }
         _this.steps.push({ step: response.data });
       })
       .catch(function (error) {
