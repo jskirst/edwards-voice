@@ -21,7 +21,8 @@ export default {
   },
   data() {
     return {
-      parts: this.step.step.parts
+      parts: this.step.step.parts,
+      cta: this.step.step.cta
     };
   }
 };
