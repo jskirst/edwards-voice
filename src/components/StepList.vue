@@ -1,6 +1,6 @@
 <template>
   <div class='step-list col s12'>
-    <step v-for="step in steps" :step.sync="step" v-on:cta_clicked="emitCtaClicked"></step>
+    <step v-for="step in steps" :step.sync="step" v-on:cta_clicked="emitCtaClicked(step)"></step>
   </div>
 </template>
 
@@ -22,8 +22,9 @@ export default {
     }
   },
   methods: {
-    emitCtaClicked() {
-      this.$emit('cta_clicked');
+    emitCtaClicked(step) {
+      console.log(step);
+      this.$emit('cta_clicked', step);
     },
     stepBack() {
       const stepsIndex = this.steps.length - 1;
@@ -45,13 +46,8 @@ export default {
         facts: this.facts,
       })
       .then(function (response) {
-        console.log(response.data)
         if (response.data.token) {
-          console.log("here");
-          console.log(_this.steps);
           var index = _this.steps.length-1;
-          console.log(index);
-          console.log(_this.steps[index])
           if ((_this.steps.length > 0) && (_this.steps[_this.steps.length-1].step.token == response.data.token)) {
             _this.steps.pop();
           }
