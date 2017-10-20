@@ -23,7 +23,6 @@ export default {
   },
   methods: {
     emitCtaClicked(step) {
-      console.log(step);
       this.$emit('cta_clicked', step);
     },
     stepBack() {
@@ -32,7 +31,7 @@ export default {
     },
     stepForward() {
       if(this.steps.length > 0){
-        var lastStep = this.steps[this.steps.length -1].step
+        var lastStep = this.steps[this.steps.length -1]
         var parts = lastStep.parts;
         for (var i = 0; i < parts.length; i++) {
           var part = parts[i];
@@ -48,11 +47,11 @@ export default {
       .then(function (response) {
         if (response.data.token) {
           var index = _this.steps.length-1;
-          if ((_this.steps.length > 0) && (_this.steps[_this.steps.length-1].step.token == response.data.token)) {
+          if ((_this.steps.length > 0) && (_this.steps[_this.steps.length-1].token == response.data.token)) {
             _this.steps.pop();
           }
         }
-        _this.steps.push({ step: response.data });
+        _this.steps.push(response.data);
       })
       .catch(function (error) {
         console.log(error);

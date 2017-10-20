@@ -1,7 +1,10 @@
 <template>
   <div class='step'>
     <part v-for="part in parts" :part="part"></part>
-    <div v-if="cta"  v-on:click="emitCtaClicked" class="cta" v-bind:class="cta_class">{{ cta }}</div>
+    <div v-if="cta"  v-on:click="emitCtaClicked" class="cta">
+      <a v-if="cta_href" :href="cta_href" :class="cta_class">{{ cta }}</a>
+      <div v-else :class="cta_class">{{ cta }}</div>
+    </div>
   </div>
 </template>
 
@@ -21,10 +24,11 @@ export default {
   },
   data() {
     return {
-      token: this.step.step.token,
-      parts: this.step.step.parts,
-      cta: this.step.step.cta,
-      cta_class: this.step.step.cta_class
+      token: this.step.token,
+      parts: this.step.parts,
+      cta: this.step.cta,
+      cta_class: this.step.cta_class,
+      cta_href: this.step.cta_href
     };
   }
 };

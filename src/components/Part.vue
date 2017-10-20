@@ -12,9 +12,7 @@ export default {
   name: 'part',
   props: ['part'],
   data() {
-    return {
-      part: this.part
-    };
+    return {};
   }
 };
 </script>
