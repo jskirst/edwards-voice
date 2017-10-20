@@ -21,6 +21,7 @@ export default {
   },
   data() {
     return {
+      token: this.step.step.token,
       parts: this.step.step.parts,
       cta: this.step.step.cta
     };

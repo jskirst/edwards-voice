@@ -45,9 +45,15 @@ export default {
         facts: this.facts,
       })
       .then(function (response) {
+        console.log(response.data)
         if (response.data.token) {
-          if (_this.steps[_this.steps.length-1].token == response.data.token) {
-            _this.steps.pop()
+          console.log("here");
+          console.log(_this.steps);
+          var index = _this.steps.length-1;
+          console.log(index);
+          console.log(_this.steps[index])
+          if ((_this.steps.length > 0) && (_this.steps[_this.steps.length-1].step.token == response.data.token)) {
+            _this.steps.pop();
           }
         }
         _this.steps.push({ step: response.data });
