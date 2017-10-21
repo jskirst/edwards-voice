@@ -4,6 +4,7 @@
     <div v-if="part.type == 'text'" class="part-text">{{ part.content }}</div>
     <v-select v-model="part.input" v-if="part.type == 'select'" :items="part.options" placeholder="...."></v-select>
     <v-text-field v-model="part.input" v-if="part.type == 'short_text'" placeholder="......" :type="part.text_field_type" :style="{ width: part.characters + 'ch'}" :mask="part.mask" dark required></v-text-field>
+    <input type='hidden' v-if="part.type == 'hidden'" :value="part.value"/>
   </div>
 </template>
 

@@ -35,7 +35,9 @@ export default {
         var parts = lastStep.parts;
         for (var i = 0; i < parts.length; i++) {
           var part = parts[i];
-          if(part.type != 'text'){
+          if(part.type == 'hidden'){
+            this.facts[part.name] = part.value;
+          } else if(part.type != 'text'){
             this.facts[part.name] = part.input;
           }
         }
