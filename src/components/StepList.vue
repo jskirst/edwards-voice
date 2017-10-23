@@ -18,7 +18,8 @@ export default {
     return {
       steps: [],
       facts: {},
-      api_url: window.edward_api_url
+      api_url: window.edward_api_url,
+      transition: window.edward_transition
     }
   },
   methods: {
@@ -30,9 +31,10 @@ export default {
       this.steps.splice(stepsIndex, 1);
     },
     stepForward() {
-      if(this.steps.length > 0){
-        var lastStep = this.steps[this.steps.length -1]
-        var parts = lastStep.parts;
+      var step_count = this.steps.length;
+      var current_step = this.steps[this.steps.length -1]
+      if(step_count > 0){
+        var parts = current_step.parts;
         for (var i = 0; i < parts.length; i++) {
           var part = parts[i];
           if(part.type == 'hidden'){
@@ -41,19 +43,31 @@ export default {
             this.facts[part.name] = part.input;
           }
         }
+
+        if (this.transition) {
+          current_step.active = false;
+        }
       }
       var _this = this
       axios.post(this.api_url, {
         facts: this.facts,
       })
       .then(function (response) {
-        if (response.data.token) {
-          var index = _this.steps.length-1;
-          if ((_this.steps.length > 0) && (_this.steps[_this.steps.length-1].token == response.data.token)) {
-            _this.steps.pop();
+        var next_step = response.data
+        if (step_count > 0) {
+          if (next_step.token) {
+            if (current_step.token == next_step.token) {
+              _this.steps.pop();
+            }
           }
         }
-        _this.steps.push(response.data);
+        if(_this.transition) {
+          next_step.transition = _this.transition
+        }
+        next_step.active = true
+        setTimeout(function(){
+          _this.steps.push(next_step);
+        },1000);
       })
       .catch(function (error) {
         console.log(error);
