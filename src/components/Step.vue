@@ -4,7 +4,7 @@
       <part v-for="part in parts" :part="part"></part>
       <div v-if="cta"  v-on:click="emitCtaClicked" class="cta">
         <a v-if="cta_href" :href="cta_href" :class="cta_class">{{ cta }}</a>
-        <v-btn v-if="cta_class == 'button'" large>{{ cta }}</v-btn>
+        <v-btn v-if="!cta_href && cta_class == 'button'" large>{{ cta }}</v-btn>
         <div v-else :class="cta_class">{{ cta }}</div>
       </div>
     </div>
