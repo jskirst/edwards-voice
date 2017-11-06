@@ -14,12 +14,11 @@ export default {
   components: {
     Step,
   },
+  props: ['api_url', 'transition'],
   data() {
     return {
       steps: [],
-      facts: {},
-      api_url: window.edward_api_url,
-      transition: window.edward_transition
+      facts: {}
     }
   },
   methods: {
