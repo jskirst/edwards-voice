@@ -32,10 +32,11 @@ export default {
   .part-text {
     padding: 10px 0 0 0;
     white-space: pre-wrap;
+    margin-right: 0.3em;
   }
 
   .input-group--text-field {
-    padding: 13px 0 0 0;
+    padding: 0;
   }
 
   .part .input-group__details {
