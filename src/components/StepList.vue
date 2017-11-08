@@ -14,11 +14,21 @@ export default {
   components: {
     Step,
   },
-  props: ['api_url', 'transition'],
+  props: {
+    api_url: {
+      type: String
+    },
+    transition: {
+      type: String
+    },
+    facts: {
+      type: Object,
+      default: function() { return {} }
+    }
+  },
   data() {
     return {
-      steps: [],
-      facts: {}
+      steps: []
     }
   },
   methods: {
