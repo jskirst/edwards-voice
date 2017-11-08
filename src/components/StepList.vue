@@ -1,6 +1,16 @@
 <template>
   <div class='step-list col s12'>
     <step v-for="step in steps" :step.sync="step" v-on:cta_clicked="emitCtaClicked(step)"></step>
+    <v-dialog v-model="error">
+      <v-card>
+        <v-card-title class="headline">Oops!</v-card-title>
+        <v-card-text>{{ errorMessage }}</v-card-text>
+        <v-card-actions>
+          <v-spacer></v-spacer>
+          <v-btn flat @click.native="error = false">Got it</v-btn>
+        </v-card-actions>
+      </v-card>
+    </v-dialog>
   </div>
 </template>
 
@@ -28,12 +38,31 @@ export default {
   },
   data() {
     return {
-      steps: []
+      steps: [],
+      error: false,
+      errorMessage: ""
     }
   },
   methods: {
     emitCtaClicked(step) {
       this.$emit('cta_clicked', step);
+    },
+    passesValidation(part){
+      if(part.min){
+        if(parseFloat(part.input) < part.min){
+          this.error = true;
+          this.errorMessage = "You must enter at least " + part.min + " to proceed.";
+          return false;
+        }
+      }
+      if(part.max){
+        if(parseFloat(part.input) > part.max){
+          this.error = true;
+          this.errorMessage = "You must enter no more than " + part.max + " to proceed.";
+          return false;
+        }
+      }
+      return true;
     },
     stepBack() {
       const stepsIndex = this.steps.length - 1;
@@ -49,7 +78,11 @@ export default {
           if(part.type == 'hidden'){
             this.facts[part.name] = part.value;
           } else if(part.type != 'text'){
-            this.facts[part.name] = part.input;
+            if(this.passesValidation(part)){
+              this.facts[part.name] = part.input;
+            } else {
+              return false
+            }
           }
         }
 
