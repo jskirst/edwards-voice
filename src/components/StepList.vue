@@ -67,7 +67,7 @@ export default {
     },
     stepBack() {
       this.previousFacts.pop();
-      this.facts = this.previousFacts.pop();
+      this.facts = this.previousFacts.pop() || {};
       this.stepForward();
     },
     stepForward() {
@@ -80,7 +80,7 @@ export default {
           var part = parts[i];
           if(part.type == 'hidden'){
             this.facts[part.name] = part.value;
-          } else if(part.type != 'text'){
+          } else if(part.type != 'text' && part.type != 'link'){
             if(this.passesValidation(part)){
               this.facts[part.name] = part.input;
             } else {
