@@ -39,6 +39,7 @@ export default {
   data() {
     return {
       steps: [],
+      previousFacts: [],
       error: false,
       errorMessage: ""
     }
@@ -65,12 +66,14 @@ export default {
       return true;
     },
     stepBack() {
-      const stepsIndex = this.steps.length - 1;
-      this.steps.splice(stepsIndex, 1);
+      this.previousFacts.pop();
+      this.facts = this.previousFacts.pop();
+      this.stepForward();
     },
     stepForward() {
       var step_count = this.steps.length;
       var current_step = this.steps[this.steps.length -1]
+      this.previousFacts << this.facts;
       if(step_count > 0){
         var parts = current_step.parts;
         for (var i = 0; i < parts.length; i++) {
