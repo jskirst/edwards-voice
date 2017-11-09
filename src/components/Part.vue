@@ -5,6 +5,7 @@
     <v-select v-model="part.input" v-if="part.type == 'select'" :items="part.options" placeholder="...."></v-select>
     <v-text-field v-model="part.input" v-if="part.type == 'short_text'" placeholder="......" :type="part.text_field_type" :style="{ width: part.characters + 'ch'}" :mask="part.mask" dark required></v-text-field>
     <input type='hidden' v-if="part.type == 'hidden'" :value="part.value"/>
+    <a v-if="part.type == 'link'" v-bind="part">{{ part.content }}</a>
   </div>
 </template>
 
