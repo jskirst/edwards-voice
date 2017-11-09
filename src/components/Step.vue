@@ -1,7 +1,7 @@
 <template>
   <transition :name="transition">
     <div class='step' v-if="step.active">
-      <part v-for="part in parts" :part="part"></part>
+      <part v-for="part in parts" :part="part" v-on:step_back="this.$emit('step_back')" v-on:step_forward="this.$emit('step_forward')"></part>
       <div v-if="cta"  v-on:click="emitCtaClicked" class="cta">
         <a v-if="cta_href" :href="cta_href" :class="cta_class">{{ cta }}</a>
         <v-btn v-if="!cta_href && cta_class == 'button'" large>{{ cta }}</v-btn>

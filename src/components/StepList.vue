@@ -1,6 +1,6 @@
 <template>
   <div class='step-list col s12'>
-    <step v-for="step in steps" :step.sync="step" v-on:cta_clicked="emitCtaClicked(step)"></step>
+    <step v-for="step in steps" :step.sync="step" v-on:step_back="stepBack()" v-on:step_forward="stepForward" v-on:cta_clicked="emitCtaClicked(step)"></step>
     <v-dialog v-model="error">
       <v-card>
         <v-card-title class="headline">Oops!</v-card-title>
