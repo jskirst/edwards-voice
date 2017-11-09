@@ -1,6 +1,6 @@
 <template>
   <div class='step-list col s12'>
-    <step v-for="step in steps" :step.sync="step" v-on:cta_clicked="emitCtaClicked(step)"></step>
+    <step v-for="step in steps" :step.sync="step" v-on:step_back="stepBack()" v-on:step_forward="stepForward" v-on:cta_clicked="emitCtaClicked(step)"></step>
     <v-dialog v-model="error">
       <v-card>
         <v-card-title class="headline">Oops!</v-card-title>
@@ -39,6 +39,7 @@ export default {
   data() {
     return {
       steps: [],
+      previousFacts: [],
       error: false,
       errorMessage: ""
     }
@@ -65,19 +66,21 @@ export default {
       return true;
     },
     stepBack() {
-      const stepsIndex = this.steps.length - 1;
-      this.steps.splice(stepsIndex, 1);
+      this.previousFacts.pop();
+      this.facts = this.previousFacts.pop() || {};
+      this.stepForward();
     },
     stepForward() {
       var step_count = this.steps.length;
       var current_step = this.steps[this.steps.length -1]
+      this.previousFacts << this.facts;
       if(step_count > 0){
         var parts = current_step.parts;
         for (var i = 0; i < parts.length; i++) {
           var part = parts[i];
           if(part.type == 'hidden'){
             this.facts[part.name] = part.value;
-          } else if(part.type != 'text'){
+          } else if(part.type != 'text' && part.type != 'link'){
             if(this.passesValidation(part)){
               this.facts[part.name] = part.input;
             } else {
