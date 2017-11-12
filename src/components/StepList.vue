@@ -67,13 +67,14 @@ export default {
     },
     stepBack() {
       this.previousFacts.pop();
+      this.steps.pop();
       this.facts = this.previousFacts.pop() || {};
       this.stepForward();
     },
     stepForward() {
       var step_count = this.steps.length;
       var current_step = this.steps[this.steps.length -1]
-      this.previousFacts << this.facts;
+      this.previousFacts.push(Object.assign({}, this.facts));
       if(step_count > 0){
         var parts = current_step.parts;
         for (var i = 0; i < parts.length; i++) {
