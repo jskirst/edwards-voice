@@ -31,7 +31,7 @@ export default {
     transition: {
       type: String
     },
-    facts: {
+    _facts: {
       type: Object,
       default: function() { return {} }
     }
@@ -41,7 +41,8 @@ export default {
       steps: [],
       previousFacts: [],
       error: false,
-      errorMessage: ""
+      errorMessage: "",
+      facts: this._facts
     }
   },
   methods: {
@@ -68,13 +69,13 @@ export default {
     stepBack() {
       this.previousFacts.pop();
       this.steps.pop();
-      this.facts = this.previousFacts.pop() || {};
+      this.steps.pop();
+      this.facts = Object.assign({}, this.previousFacts[this.previousFacts.length-1]);
       this.stepForward();
     },
     stepForward() {
       var step_count = this.steps.length;
       var current_step = this.steps[this.steps.length -1]
-      this.previousFacts.push(Object.assign({}, this.facts));
       if(step_count > 0){
         var parts = current_step.parts;
         for (var i = 0; i < parts.length; i++) {
@@ -113,6 +114,7 @@ export default {
         next_step.active = true
         setTimeout(function(){
           _this.steps.push(next_step);
+          _this.previousFacts.push(Object.assign({}, _this.facts));
         },1000);
       })
       .catch(function (error) {
