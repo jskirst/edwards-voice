@@ -3,7 +3,7 @@
   <div class="part" v-else>
     <div v-if="part.type == 'text'" class="part-text" v-bind="part">{{ part.content }}</div>
     <v-select v-model="part.input" v-if="part.type == 'select'" :items="part.options" placeholder="...."></v-select>
-    <v-text-field v-model="part.input" v-if="part.type == 'short_text'" placeholder="......" :type="part.text_field_type" :style="{ width: part.characters + 'ch'}" :mask="part.mask" dark required></v-text-field>
+    <v-text-field v-model="part.input" v-if="part.type == 'short_text'" placeholder="......" :type="part.text_field_type" :style="{ width: part.characters + 'ch'}" :mask="mask" dark required></v-text-field>
     <input type='hidden' v-if="part.type == 'hidden'" :value="part.value"/>
     <a v-if="part.type == 'link'" v-bind="part" v-on:click.stop="emitEvent">{{ part.content }}</a>
   </div>
@@ -12,7 +12,22 @@
 <script>
 export default {
   name: 'part',
-  props: ['part'],
+  props: {
+    part: {
+      type: Object,
+      default: function() { {} }
+    },
+    mask: {
+      type: String,
+      default: function() {
+        if (this.part.type == "short_text" && this.part.mask) {
+          if (!md.is('iOS') || md.version > 9) {
+            return this.part.mask
+          }
+        }
+      }
+    }
+  },
   data() {
     return {};
   },

@@ -38,9 +38,7 @@ export default {
     validClient: {
       type: Boolean,
       default: function() {
-        var MobileDetect = require('mobile-detect');
-        var md = new MobileDetect(window.navigator.userAgent);
-        if (md.is('iOS') && md.version('iOS') < 10){
+        if (window.md.is('iOS') && window.md.version('iOS') < 9){
           return false;
         }
         return true;
@@ -133,10 +131,17 @@ export default {
       });
     }
   },
+  beforeCreate() {
+    var MobileDetect = require('mobile-detect');
+    window.md = new MobileDetect(window.navigator.userAgent);
+  },
   created() {
     if(this.validClient){
       this.stepForward();
-    } else {
+    }
+  },
+  mounted() {
+    if(!this.validClient){
       console.log("Stopping Edward - invalid client");
       this.$emit('invalid_client');
     }
