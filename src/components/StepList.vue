@@ -34,6 +34,17 @@ export default {
     _facts: {
       type: Object,
       default: function() { return {} }
+    },
+    validClient: {
+      type: Boolean,
+      default: function() {
+        var MobileDetect = require('mobile-detect');
+        var md = new MobileDetect(window.navigator.userAgent);
+        if (md.is('iOS') && md.version('iOS') < 10){
+          return false;
+        }
+        return true;
+      }
     }
   },
   data() {
@@ -123,7 +134,12 @@ export default {
     }
   },
   created() {
-    this.stepForward();
+    if(this.validClient){
+      this.stepForward();
+    } else {
+      console.log("Stopping Edward - invalid client");
+      this.$emit('invalid_client');
+    }
   }
 };
 </script>
