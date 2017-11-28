@@ -15,6 +15,7 @@
 </template>
 
 <script type = "text/javascript" >
+var ply = require('babel-polyfill');
 var axios = require('axios');
 
 import Step from './Step';
@@ -134,6 +135,7 @@ export default {
   beforeCreate() {
     var MobileDetect = require('mobile-detect');
     window.md = new MobileDetect(window.navigator.userAgent);
+    window.platform = require('platform');
   },
   created() {
     if(this.validClient){
