@@ -42,6 +42,9 @@ export default {
         if (window.md.is('iOS') && window.md.version('iOS') < 9){
           return false;
         }
+        if (window.md.is('AndroidOS') && window.md.version('Android') < 4.3) {
+          return false;
+        }
         return true;
       }
     }
