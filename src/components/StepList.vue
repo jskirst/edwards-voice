@@ -1,6 +1,6 @@
 <template>
   <div class='step-list col s12'>
-    <step v-for="step in steps" :step.sync="step" v-on:step_back="stepBack()" v-on:step_forward="stepForward" v-on:cta_clicked="emitCtaClicked(step)"></step>
+    <step v-for="step in steps" :step.sync="step" v-on:step_back="stepBack()" v-on:step_forward="stepForward" v-on:cta_clicked="emitCtaClicked(step)" v-on:choice="makeChoice"></step>
     <v-dialog v-model="error">
       <v-card>
         <v-card-title class="headline">Oops!</v-card-title>
@@ -78,6 +78,18 @@ export default {
         }
       }
       return true;
+    },
+    makeChoice(part) {
+      var new_facts = decodeURIComponent(part.part.facts);
+      new_facts = new_facts.split('&');
+      console.log(new_facts)
+      for (var i = 0; i < new_facts.length; i++) {
+        var fact = new_facts[i];
+        var fact_parts = fact.split('=')
+        console.log(fact_parts);
+        this.facts[fact_parts[0]] = fact_parts[1];
+      }
+      this.stepForward();
     },
     stepBack() {
       this.previousFacts.pop();
