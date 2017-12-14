@@ -34,7 +34,10 @@ export default {
     },
     _facts: {
       type: Object,
-      default: function() { return {} }
+      default: function() {
+        console.log('Loading app...');
+        return this.load() 
+      }
     },
     validClient: {
       type: Boolean,
@@ -59,6 +62,24 @@ export default {
     }
   },
   methods: {
+    load: function () {
+      var crumbles = document.cookie.split(';');
+      console.log(crumbles);
+      for(var i = 0; i < crumbles.length; i++){
+        var crumble = crumbles[i].split('=');
+        console.log(crumble);
+        if(crumble[0] == 'facts'){
+          console.log(crumble[1]);
+          return JSON.parse(decodeURIComponent(crumble[1]));
+        }
+      }
+      return {};
+    },
+    save: function (data, expires, path) {
+      var exdate=new Date();
+      exdate.setMinutes(exdate.getMinutes()+3600);
+      document.cookie = "facts=" + encodeURIComponent(JSON.stringify(data)) + ";expires=" + exdate.toUTCString();
+    },
     emitCtaClicked(step) {
       this.$emit('cta_clicked', step);
     },
@@ -99,6 +120,7 @@ export default {
       this.stepForward();
     },
     stepForward() {
+      this.save(this.facts);
       var step_count = this.steps.length;
       var current_step = this.steps[this.steps.length -1]
       if(step_count > 0){
@@ -153,6 +175,9 @@ export default {
     window.platform = require('platform');
   },
   created() {
+    console.log("LOAD!");
+    this.facts = this.load();
+    console.log('Created!');
     if(this.validClient){
       this.stepForward();
     }
