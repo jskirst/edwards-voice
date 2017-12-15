@@ -136,7 +136,11 @@ export default {
       var lastTime = this.previousFacts[this.previousFacts.length-1].last_interaction || 0;
       var currentTime = new Date().getTime() / 1000;
       this.facts.last_interaction = currentTime;
-      this.facts.last_interaction_seconds = currentTime - lastTime;
+      if(lastTime > 0) {
+        this.facts.last_interaction_seconds = currentTime - lastTime;
+      } else {
+        this.facts.last_interaction_seconds = 0;
+      }
     },
     stepBack() {
       this.facts.last_interaction = null;
