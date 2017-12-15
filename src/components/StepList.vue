@@ -22,9 +22,11 @@ import Step from './Step';
 
 export default {
   name: 'step-list',
+
   components: {
     Step,
   },
+
   props: {
     api_url: {
       type: String
@@ -52,6 +54,7 @@ export default {
       }
     }
   },
+
   data() {
     return {
       steps: [],
@@ -61,15 +64,16 @@ export default {
       facts: this._facts
     }
   },
+
   methods: {
     load: function () {
       var crumbles = document.cookie.split(';');
-      console.log(crumbles);
+      //console.log(crumbles);
       for(var i = 0; i < crumbles.length; i++){
         var crumble = crumbles[i].split('=');
-        console.log(crumble);
+        //console.log(crumble);
         if(crumble[0] == 'facts'){
-          console.log(crumble[1]);
+          //console.log(crumble[1]);
           return JSON.parse(decodeURIComponent(crumble[1]));
         }
       }
@@ -103,43 +107,62 @@ export default {
     makeChoice(part) {
       var new_facts = decodeURIComponent(part.part.facts);
       new_facts = new_facts.split('&');
-      console.log(new_facts)
       for (var i = 0; i < new_facts.length; i++) {
         var fact = new_facts[i];
         var fact_parts = fact.split('=')
-        console.log(fact_parts);
         this.facts[fact_parts[0]] = fact_parts[1];
       }
       this.stepForward();
     },
+    currentStep: function() {
+      return this.steps[this.steps.length -1]
+    },
+    compileFacts() {
+      var parts = this.currentStep().parts;
+      for (var i = 0; i < parts.length; i++) {
+        var part = parts[i];
+        if(part.type == 'hidden'){
+          this.facts[part.name] = part.value;
+        } else if(part.type != 'text' && part.type != 'link'){
+          if(this.passesValidation(part)){
+            this.facts[part.name] = part.input;
+          } else {
+            return false
+          }
+        }
+      }
+    },
+    setLastInteraction(){
+      var lastTime = this.previousFacts[this.previousFacts.length-1].last_interaction || 0;
+      var currentTime = new Date().getTime() / 1000;
+      this.facts.last_interaction = currentTime;
+      this.facts.last_interaction_seconds = currentTime - lastTime;
+    },
     stepBack() {
+      this.facts.last_interaction = null;
+      this.facts.last_interaction_seconds = null;
       this.previousFacts.pop();
       this.steps.pop();
       this.steps.pop();
+      this.previousFacts[this.previousFacts.length-1].last_interaction = null;
+      this.previousFacts[this.previousFacts.length-1].last_interaction_seconds = null;
+      while(JSON.stringify(this.previousFacts[this.previousFacts.length-1]) == JSON.stringify(this.facts)){
+        this.previousFacts.pop();
+        this.previousFacts[this.previousFacts.length-1].last_interaction = null;
+        this.previousFacts[this.previousFacts.length-1].last_interaction_seconds = null;
+        this.steps.pop();
+      }
       this.facts = Object.assign({}, this.previousFacts[this.previousFacts.length-1]);
       this.stepForward();
     },
     stepForward() {
       this.save(this.facts);
       var step_count = this.steps.length;
-      var current_step = this.steps[this.steps.length -1]
       if(step_count > 0){
-        var parts = current_step.parts;
-        for (var i = 0; i < parts.length; i++) {
-          var part = parts[i];
-          if(part.type == 'hidden'){
-            this.facts[part.name] = part.value;
-          } else if(part.type != 'text' && part.type != 'link'){
-            if(this.passesValidation(part)){
-              this.facts[part.name] = part.input;
-            } else {
-              return false
-            }
-          }
-        }
-
+        this.setLastInteraction();
+        this.compileFacts();
         if (this.transition) {
-          current_step.active = false;
+          this.currentStep().active = false;
         }
       }
       var _this = this
@@ -150,7 +173,7 @@ export default {
         var next_step = response.data
         if (step_count > 0) {
           if (next_step.token) {
-            if (current_step.token == next_step.token) {
+            if (_this.currentStep().token == next_step.token) {
               _this.steps.pop();
             }
           }
