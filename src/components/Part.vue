@@ -5,7 +5,7 @@
     <div v-if="part.type == 'punctuation'" class="part-text part__punctuation">{{ part.content }}</div>
     <div v-if="part.type == 'choice'" class="part__choice" v-bind="part" v-on:click.stop="makeChoice">{{ part.content }}</div>
     <v-select v-model="part.input" v-if="part.type == 'select'" :items="part.options" placeholder="...."></v-select>
-    <v-text-field v-model="part.input" v-if="part.type == 'short_text'" placeholder="......" :type="part.text_field_type" :style="{ width: part.characters + 'ch'}" :mask="mask" :class="{ 'part--simple': simple }" dark required></v-text-field>
+    <v-text-field v-model="part.input" v-if="part.type == 'short_text'" placeholder="......" :type="part.text_field_type" :style="{ width: part.characters + 'ch'}" :mask="mask" dark required></v-text-field>
     <input type='hidden' v-if="part.type == 'hidden'" :value="part.value"/>
     <a v-if="part.type == 'link'" v-bind="part" v-on:click.stop="emitEvent">{{ part.content }}</a>
   </div>
@@ -19,39 +19,10 @@ export default {
       type: Object,
       default: function() { {} }
     },
-    simple: {
-      type: Boolean,
-      default: function() {
-        if (platform.name == "Opera" && parseFloat(platform.version) < 36) {
-          return true;
-        }
-
-        if (platform.name == 'Safari' && parseFloat(platform.version) < 10) {
-          return true;
-        }
-        return false;
-      }
-    },
     mask: {
       type: String,
       default: function() {
         if (this.part.type != "short_text" || !this.part.mask) {
-          return null;
-        }
-
-        if (md.is('iOS') && md.version < 10) {
-          return null;
-        }
-
-        if (platform.name == "Opera" && parseFloat(platform.version) < 36) {
-          return null;
-        }
-
-        if (platform.name == "IE" && parseFloat(platform.version) < 12) {
-          return null;
-        }
-
-        if (platform.name == 'Safari' && parseFloat(platform.version) < 10) {
           return null;
         }
         return this.part.mask
@@ -95,10 +66,6 @@ export default {
 
   .part .input-group__details {
     min-height: 0px;
-  }
-
-  .part .part--simple .input-group__details {
-    display: none;
   }
 
   .input-group--text-field input {
