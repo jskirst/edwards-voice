@@ -20,6 +20,22 @@ var axios = require('axios');
 
 import Step from './Step';
 
+window.load = function () {
+  var ls = window.localStorage
+  var facts = ls.getItem("facts");
+  if(!facts){
+    return {}
+  } else {
+    return JSON.parse(decodeURIComponent(ls.getItem("facts")));
+  }
+}
+
+window.save = function (data, expires, path) {
+  var exdate=new Date();
+  var ls = window.localStorage
+  ls.setItem("facts", encodeURIComponent(JSON.stringify(data)));
+}
+
 export default {
   name: 'step-list',
 
@@ -37,20 +53,8 @@ export default {
     _facts: {
       type: Object,
       default: function() {
-        console.log('Loading app...');
-        return this.load() 
-      }
-    },
-    validClient: {
-      type: Boolean,
-      default: function() {
-        if (window.md.is('iOS') && window.md.version('iOS') < 9){
-          return false;
-        }
-        if (window.md.is('AndroidOS') && window.md.version('Android') < 4.3) {
-          return false;
-        }
-        return true;
+        console.log('Loading facts...');
+        return window.load();
       }
     }
   },
@@ -66,24 +70,6 @@ export default {
   },
 
   methods: {
-    load: function () {
-      var crumbles = document.cookie.split(';');
-      //console.log(crumbles);
-      for(var i = 0; i < crumbles.length; i++){
-        var crumble = crumbles[i].split('=');
-        //console.log(crumble);
-        if(crumble[0] == 'facts'){
-          //console.log(crumble[1]);
-          return JSON.parse(decodeURIComponent(crumble[1]));
-        }
-      }
-      return {};
-    },
-    save: function (data, expires, path) {
-      var exdate=new Date();
-      exdate.setMinutes(exdate.getMinutes()+3600);
-      document.cookie = "facts=" + encodeURIComponent(JSON.stringify(data)) + ";expires=" + exdate.toUTCString();
-    },
     emitCtaClicked(step) {
       this.$emit('cta_clicked', step);
     },
@@ -160,7 +146,7 @@ export default {
       this.stepForward();
     },
     stepForward() {
-      this.save(this.facts);
+      window.save(this.facts);
       var step_count = this.steps.length;
       if(step_count > 0){
         this.setLastInteraction();
@@ -196,24 +182,8 @@ export default {
       });
     }
   },
-  beforeCreate() {
-    var MobileDetect = require('mobile-detect');
-    window.md = new MobileDetect(window.navigator.userAgent);
-    window.platform = require('platform');
-  },
   created() {
-    console.log("LOAD!");
-    this.facts = this.load();
-    console.log('Created!');
-    if(this.validClient){
-      this.stepForward();
-    }
-  },
-  mounted() {
-    if(!this.validClient){
-      console.log("Stopping Edward - invalid client");
-      this.$emit('invalid_client');
-    }
+    this.stepForward();
   }
 };
 </script>
