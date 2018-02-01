@@ -50,6 +50,12 @@ export default {
     transition: {
       type: String
     },
+    geolocation: {
+      type: Boolean,
+      default: function() {
+        return false;
+      }
+    },
     _facts: {
       type: Object,
       default: function() {
@@ -73,6 +79,7 @@ export default {
     emitCtaClicked(step) {
       this.$emit('cta_clicked', step);
     },
+
     passesValidation(part){
       if(part.min){
         if(parseFloat(part.input) < part.min){
@@ -90,6 +97,7 @@ export default {
       }
       return true;
     },
+
     makeChoice(part) {
       var new_facts = decodeURIComponent(part.part.facts);
       new_facts = new_facts.split('&');
@@ -100,9 +108,11 @@ export default {
       }
       this.stepForward();
     },
+
     currentStep: function() {
       return this.steps[this.steps.length -1]
     },
+
     compileFacts() {
       var parts = this.currentStep().parts;
       for (var i = 0; i < parts.length; i++) {
@@ -118,6 +128,7 @@ export default {
         }
       }
     },
+
     setLastInteraction(){
       var lastTime = this.previousFacts[this.previousFacts.length-1].last_interaction || 0;
       var currentTime = new Date().getTime() / 1000;
@@ -128,6 +139,7 @@ export default {
         this.facts.last_interaction_seconds = 0;
       }
     },
+
     stepBack() {
       this.facts.last_interaction = null;
       this.facts.last_interaction_seconds = null;
@@ -145,6 +157,7 @@ export default {
       this.facts = Object.assign({}, this.previousFacts[this.previousFacts.length-1]);
       this.stepForward();
     },
+
     stepForward() {
       window.save(this.facts);
       var step_count = this.steps.length;
@@ -182,8 +195,19 @@ export default {
       });
     }
   },
+
   created() {
-    this.stepForward();
+    if(this.geolocation) {
+      var _this = this;
+      navigator.geolocation.getCurrentPosition(
+        function(position) {
+          _this.facts.position = position.coords.latitude + "," + position.coords.longitude;
+          _this.stepForward();
+        },
+      )
+    } else {
+      this.stepForward();
+    }
   }
 };
 </script>
